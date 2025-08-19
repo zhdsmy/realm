@@ -1,7 +1,7 @@
 FROM alpine:latest
 
 ARG TARGETARCH
-ARG VERSION=v2.9.1
+ARG VERSION=v2.9.2
 
 WORKDIR /realm
 
