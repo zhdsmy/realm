@@ -1,20 +1,32 @@
-FROM alpine:latest
+# syntax=docker/dockerfile:1
+
+FROM alpine:3.23 AS downloader
 
 ARG TARGETARCH
 ARG VERSION=v2.9.4
 
-WORKDIR /realm
+RUN apk add --no-cache ca-certificates tar wget \
+    && case "${TARGETARCH}" in \
+         amd64) REALM_ARCH="x86_64-unknown-linux-musl" ;; \
+         arm64) REALM_ARCH="aarch64-unknown-linux-musl" ;; \
+         *) echo "Unsupported TARGETARCH: ${TARGETARCH}" >&2; exit 1 ;; \
+       esac \
+    && wget -qO /tmp/realm.tar.gz "https://github.com/zhboner/realm/releases/download/${VERSION}/realm-${REALM_ARCH}.tar.gz" \
+    && tar -xzf /tmp/realm.tar.gz -C /tmp \
+    && install -m 0755 /tmp/realm /usr/bin/realm
 
-RUN if [ "$TARGETARCH" = "arm64" ] ; then \
-    wget https://github.com/zhboner/realm/releases/download/${VERSION}/realm-aarch64-unknown-linux-musl.tar.gz \
-    && tar -zxvf realm-aarch64-unknown-linux-musl.tar.gz \
-    && cp realm /usr/bin/realm \
-    && chmod +x /usr/bin/realm; \
-    else \
-    wget https://github.com/zhboner/realm/releases/download/${VERSION}/realm-x86_64-unknown-linux-musl.tar.gz \
-    && tar -zxvf realm-x86_64-unknown-linux-musl.tar.gz \
-    && cp realm /usr/bin/realm \
-    && chmod +x /usr/bin/realm; \
-    fi
+FROM alpine:3.23
+
+ARG VERSION=v2.9.4
+
+LABEL org.opencontainers.image.title="realm" \
+      org.opencontainers.image.description="Docker image for realm, a simple high-performance relay server" \
+      org.opencontainers.image.version="${VERSION}" \
+      org.opencontainers.image.source="https://github.com/zhdsmy/realm" \
+      org.opencontainers.image.licenses="MIT"
+
+RUN apk add --no-cache ca-certificates
+
+COPY --from=downloader /usr/bin/realm /usr/bin/realm
 
 ENTRYPOINT ["/usr/bin/realm"]
