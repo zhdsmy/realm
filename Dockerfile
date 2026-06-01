@@ -7,6 +7,8 @@ ARG VERSION=v2.9.4
 ARG REALM_AMD64_SHA256=a19b86c4ae4642d5864821b41d23633c0c91df279a88496c05834dc584169175
 ARG REALM_ARM64_SHA256=0195e77ca99713166e25ff85fefe042049c79fdaddf500e8ffd9ba77494a029c
 
+SHELL ["/bin/ash", "-eo", "pipefail", "-c"]
+
 RUN apk add --no-cache ca-certificates tar wget \
     && case "${TARGETARCH}" in \
          amd64) REALM_ARCH="x86_64-unknown-linux-musl"; REALM_SHA256="${REALM_AMD64_SHA256}" ;; \
