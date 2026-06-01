@@ -9,6 +9,7 @@ Docker image for [realm](https://github.com/zhboner/realm), a simple high-perfor
 
 - realm: `v2.9.4`
 - Base image: `alpine:3.23`
+- Release artifacts are verified with pinned SHA256 checksums during build.
 
 ## Supported platforms
 
@@ -70,7 +71,7 @@ docker build \
 The realm version is pinned in `Dockerfile` and `.github/workflows/main.yml`. To update:
 
 1. Check the upstream [realm releases](https://github.com/zhboner/realm/releases).
-2. Update `VERSION` / `DEFAULT_VERSION`.
+2. Update `VERSION` / `DEFAULT_VERSION` and the per-architecture SHA256 build arguments.
 3. Build and test the image.
 4. Tag the repository as `vX.Y.Z` to publish versioned tags.
 

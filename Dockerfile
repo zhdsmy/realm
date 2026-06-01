@@ -4,14 +4,17 @@ FROM alpine:3.23 AS downloader
 
 ARG TARGETARCH
 ARG VERSION=v2.9.4
+ARG REALM_AMD64_SHA256=a19b86c4ae4642d5864821b41d23633c0c91df279a88496c05834dc584169175
+ARG REALM_ARM64_SHA256=0195e77ca99713166e25ff85fefe042049c79fdaddf500e8ffd9ba77494a029c
 
 RUN apk add --no-cache ca-certificates tar wget \
     && case "${TARGETARCH}" in \
-         amd64) REALM_ARCH="x86_64-unknown-linux-musl" ;; \
-         arm64) REALM_ARCH="aarch64-unknown-linux-musl" ;; \
+         amd64) REALM_ARCH="x86_64-unknown-linux-musl"; REALM_SHA256="${REALM_AMD64_SHA256}" ;; \
+         arm64) REALM_ARCH="aarch64-unknown-linux-musl"; REALM_SHA256="${REALM_ARM64_SHA256}" ;; \
          *) echo "Unsupported TARGETARCH: ${TARGETARCH}" >&2; exit 1 ;; \
        esac \
     && wget -qO /tmp/realm.tar.gz "https://github.com/zhboner/realm/releases/download/${VERSION}/realm-${REALM_ARCH}.tar.gz" \
+    && echo "${REALM_SHA256}  /tmp/realm.tar.gz" | sha256sum -c - \
     && tar -xzf /tmp/realm.tar.gz -C /tmp \
     && install -m 0755 /tmp/realm /usr/bin/realm
 

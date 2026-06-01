@@ -47,8 +47,21 @@ jobs:
             exit 0
           fi
 
+          AMD64_SHA256="$(
+            curl -fsSL "https://github.com/${UPSTREAM_REPO}/releases/download/${LATEST_TAG}/realm-x86_64-unknown-linux-musl.tar.gz" \
+              | sha256sum \
+              | awk '{print $1}'
+          )"
+          ARM64_SHA256="$(
+            curl -fsSL "https://github.com/${UPSTREAM_REPO}/releases/download/${LATEST_TAG}/realm-aarch64-unknown-linux-musl.tar.gz" \
+              | sha256sum \
+              | awk '{print $1}'
+          )"
+
           perl -0pi -e "s/\Q${CURRENT_NUMBER}\E/${LATEST_VERSION}/g" \
             Dockerfile README.md .github/workflows/main.yml
+          perl -0pi -e "s/^ARG REALM_AMD64_SHA256=.*/ARG REALM_AMD64_SHA256=${AMD64_SHA256}/m" Dockerfile
+          perl -0pi -e "s/^ARG REALM_ARM64_SHA256=.*/ARG REALM_ARM64_SHA256=${ARM64_SHA256}/m" Dockerfile
 
       - name: Create update pull request
         uses: peter-evans/create-pull-request@v8
