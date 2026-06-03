@@ -28,7 +28,7 @@ jobs:
         run: |
           set -euo pipefail
 
-          CURRENT_VERSION="$(sed -n 's/^  DEFAULT_VERSION: //p' .github/workflows/main.yml)"
+          CURRENT_VERSION="$(tr -d '[:space:]' < VERSION)"
           CURRENT_NUMBER="${CURRENT_VERSION#v}"
           LATEST_TAG="$(gh release view --repo "${UPSTREAM_REPO}" --json tagName -q .tagName)"
           LATEST_VERSION="${LATEST_TAG#v}"
@@ -59,7 +59,7 @@ jobs:
           )"
 
           perl -0pi -e "s/\Q${CURRENT_NUMBER}\E/${LATEST_VERSION}/g" \
-            Dockerfile README.md .github/workflows/main.yml
+            VERSION Dockerfile README.md
           perl -0pi -e "s/^ARG REALM_AMD64_SHA256=.*/ARG REALM_AMD64_SHA256=${AMD64_SHA256}/m" Dockerfile
           perl -0pi -e "s/^ARG REALM_ARM64_SHA256=.*/ARG REALM_ARM64_SHA256=${ARM64_SHA256}/m" Dockerfile
 

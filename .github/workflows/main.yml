@@ -21,7 +21,6 @@ concurrency:
 
 env:
   IMAGE_NAME: realm
-  DEFAULT_VERSION: v2.9.4
 
 jobs:
   validate:
@@ -37,7 +36,7 @@ jobs:
           if [[ "${GITHUB_REF}" == refs/tags/v* ]]; then
             VERSION="${GITHUB_REF#refs/tags/}"
           else
-            VERSION="${DEFAULT_VERSION}"
+            VERSION="$(tr -d '[:space:]' < VERSION)"
           fi
           echo "version=${VERSION}" >> "${GITHUB_OUTPUT}"
           echo "semver=${VERSION#v}" >> "${GITHUB_OUTPUT}"
@@ -117,7 +116,7 @@ jobs:
           if [[ "${GITHUB_REF}" == refs/tags/v* ]]; then
             VERSION="${GITHUB_REF#refs/tags/}"
           else
-            VERSION="${DEFAULT_VERSION}"
+            VERSION="$(tr -d '[:space:]' < VERSION)"
           fi
           echo "version=${VERSION}" >> "${GITHUB_OUTPUT}"
           echo "semver=${VERSION#v}" >> "${GITHUB_OUTPUT}"
