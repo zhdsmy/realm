@@ -66,6 +66,7 @@ jobs:
       - name: Create update pull request
         uses: peter-evans/create-pull-request@v8
         with:
+          token: ${{ secrets.AUTOMATION_TOKEN }}
           branch: automation/update-realm
           delete-branch: true
           commit-message: Update realm to ${{ steps.upstream.outputs.latest_tag }}
