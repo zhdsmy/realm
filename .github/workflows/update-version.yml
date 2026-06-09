@@ -58,8 +58,13 @@ jobs:
               | awk '{print $1}'
           )"
 
-          perl -0pi -e "s/\Q${CURRENT_NUMBER}\E/${LATEST_VERSION}/g" \
-            VERSION Dockerfile README.md
+          export OLD_VERSION="${CURRENT_VERSION}" NEW_VERSION="${LATEST_TAG}"
+          printf '%s\n' "${LATEST_TAG}" > VERSION
+          perl -0pi -e '
+            s/^ARG VERSION=\Q$ENV{OLD_VERSION}\E$/ARG VERSION=$ENV{NEW_VERSION}/mg;
+            s/(realm: `)\Q$ENV{OLD_VERSION}\E(`)/$1$ENV{NEW_VERSION}$2/g;
+            s/(--build-arg VERSION=)\Q$ENV{OLD_VERSION}\E/$1$ENV{NEW_VERSION}/g;
+          ' Dockerfile README.md
           perl -0pi -e "s/^ARG REALM_AMD64_SHA256=.*/ARG REALM_AMD64_SHA256=${AMD64_SHA256}/m" Dockerfile
           perl -0pi -e "s/^ARG REALM_ARM64_SHA256=.*/ARG REALM_ARM64_SHA256=${ARM64_SHA256}/m" Dockerfile
 
