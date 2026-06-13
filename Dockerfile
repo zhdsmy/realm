@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1
 
-FROM alpine:3.23 AS downloader
+FROM alpine:3.24 AS downloader
 
 ARG TARGETARCH
 ARG VERSION=v2.9.4
@@ -20,7 +20,7 @@ RUN apk add --no-cache ca-certificates tar wget \
     && tar -xzf /tmp/realm.tar.gz -C /tmp \
     && install -m 0755 /tmp/realm /usr/bin/realm
 
-FROM alpine:3.23
+FROM alpine:3.24
 
 ARG VERSION=v2.9.4
 
@@ -30,7 +30,7 @@ LABEL org.opencontainers.image.title="realm" \
       org.opencontainers.image.source="https://github.com/zhdsmy/realm" \
       org.opencontainers.image.licenses="MIT"
 
-RUN apk add --no-cache ca-certificates
+RUN apk add --no-cache --upgrade ca-certificates libcrypto3 libssl3
 
 COPY --from=downloader /usr/bin/realm /usr/bin/realm
 
