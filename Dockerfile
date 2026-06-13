@@ -30,7 +30,7 @@ LABEL org.opencontainers.image.title="realm" \
       org.opencontainers.image.source="https://github.com/zhdsmy/realm" \
       org.opencontainers.image.licenses="MIT"
 
-RUN apk add --no-cache ca-certificates
+RUN apk add --no-cache --upgrade ca-certificates libcrypto3 libssl3
 
 COPY --from=downloader /usr/bin/realm /usr/bin/realm
 
