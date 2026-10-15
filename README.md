@@ -7,7 +7,7 @@ Docker image for [realm](https://github.com/zhboner/realm), a simple high-perfor
 
 ## Included version
 
-- realm: `v2.9.4`
+- realm: `v2.9.6`
 - Base image: `alpine:3.23`
 - Release artifacts are verified with pinned SHA256 checksums during build.
 
@@ -62,7 +62,7 @@ services:
 
 ```bash
 docker build \
-  --build-arg VERSION=v2.9.4 \
+  --build-arg VERSION=v2.9.6 \
   -t domizhang/realm:local .
 ```
 
