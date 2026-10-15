@@ -3,9 +3,9 @@
 FROM alpine:3.24 AS downloader
 
 ARG TARGETARCH
-ARG VERSION=v2.9.4
-ARG REALM_AMD64_SHA256=a19b86c4ae4642d5864821b41d23633c0c91df279a88496c05834dc584169175
-ARG REALM_ARM64_SHA256=0195e77ca99713166e25ff85fefe042049c79fdaddf500e8ffd9ba77494a029c
+ARG VERSION=v2.9.6
+ARG REALM_AMD64_SHA256=b1cc335547bea8bb2a88178bef12ec7f2363e36200e7ea1d4e1e67627929bf65
+ARG REALM_ARM64_SHA256=f4c0318dd86854da483dcb7645b4f39cae2cc3f91c688fef969d53220b949488
 
 SHELL ["/bin/ash", "-eo", "pipefail", "-c"]
 
@@ -22,7 +22,7 @@ RUN apk add --no-cache ca-certificates tar wget \
 
 FROM alpine:3.24
 
-ARG VERSION=v2.9.4
+ARG VERSION=v2.9.6
 
 LABEL org.opencontainers.image.title="realm" \
       org.opencontainers.image.description="Docker image for realm, a simple high-performance relay server" \
