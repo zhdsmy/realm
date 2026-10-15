@@ -8,7 +8,7 @@ Docker image for [realm](https://github.com/zhboner/realm), a simple high-perfor
 ## Included version
 
 - realm: `v2.9.6`
-- Base image: `alpine:3.23`
+- Base image: `alpine:3.24`
 - Release artifacts are verified with pinned SHA256 checksums during build.
 
 ## Supported platforms
@@ -19,7 +19,7 @@ Docker image for [realm](https://github.com/zhboner/realm), a simple high-perfor
 ## Tags
 
 - `latest`: latest build from the default branch
-- `2.9.4`: current realm version build
+- `2.9.6`: current realm version build
 - `2.9`: major/minor tag for versioned releases
 
 ## Quick start
