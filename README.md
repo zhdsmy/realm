@@ -78,3 +78,9 @@ The realm version is pinned in `VERSION` and `Dockerfile`. To update:
 ## License
 
 This repository only builds a Docker image. realm is distributed under its upstream license.
+
+## CA security maintenance
+
+Runtime package layers are rebuilt against current repository metadata, even when
+the application version is unchanged. CI rejects the two CA roots revoked in
+October 2026 by DER SHA256 and fails on an empty or unreadable trust bundle.

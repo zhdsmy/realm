@@ -9,7 +9,7 @@ ARG REALM_ARM64_SHA256=f4c0318dd86854da483dcb7645b4f39cae2cc3f91c688fef969d53220
 
 SHELL ["/bin/ash", "-eo", "pipefail", "-c"]
 
-RUN apk add --no-cache ca-certificates tar wget \
+RUN apk add --no-cache --upgrade ca-certificates ca-certificates-bundle tar wget \
     && case "${TARGETARCH}" in \
          amd64) REALM_ARCH="x86_64-unknown-linux-musl"; REALM_SHA256="${REALM_AMD64_SHA256}" ;; \
          arm64) REALM_ARCH="aarch64-unknown-linux-musl"; REALM_SHA256="${REALM_ARM64_SHA256}" ;; \
@@ -20,7 +20,7 @@ RUN apk add --no-cache ca-certificates tar wget \
     && tar -xzf /tmp/realm.tar.gz -C /tmp \
     && install -m 0755 /tmp/realm /usr/bin/realm
 
-FROM alpine:3.24
+FROM alpine:3.24 AS runtime
 
 ARG VERSION=v2.9.6
 
@@ -30,7 +30,7 @@ LABEL org.opencontainers.image.title="realm" \
       org.opencontainers.image.source="https://github.com/zhdsmy/realm" \
       org.opencontainers.image.licenses="MIT"
 
-RUN apk add --no-cache --upgrade ca-certificates libcrypto3 libssl3
+RUN apk add --no-cache --upgrade ca-certificates ca-certificates-bundle libcrypto3 libssl3
 
 COPY --from=downloader /usr/bin/realm /usr/bin/realm
 
